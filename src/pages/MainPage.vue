@@ -38,14 +38,11 @@ const scrollComponent = ref<HTMLElement | null>(null)
 const pageNumber = ref(0)
 
 onMounted(async () => {
-  page.value = await getAnimeList()
-  animeList.value = animeList.value.concat(page.value.Page.media)
-  pageNumber.value = page.value.Page.pageInfo.currentPage
-
+  await loadListofAnime()
   genresList.value = await getGenres()
 })
 
-const loadNewAnime = debounce(async (resetList = false) => {
+const loadListofAnime = debounce(async (resetList = false) => {
   const variable = {
     page: 1,
     genres: undefined as string[] | undefined
@@ -68,14 +65,14 @@ const loadNewAnime = debounce(async (resetList = false) => {
 }, 1000)
 
 watch(selectedGenres, () => {
-  loadNewAnime(true)
+  loadListofAnime(true)
 })
 
 useScroll(() => {
   const element = scrollComponent.value
   if (element != null) {
     if (element.getBoundingClientRect().bottom - 200 < window.innerHeight) {
-      loadNewAnime()
+      loadListofAnime()
     }
   }
 })
