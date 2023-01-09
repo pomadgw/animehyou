@@ -1,8 +1,14 @@
-import { request, gql } from 'graphql-request'
-import { Page } from '../types'
+import { request, gql, Variables } from 'graphql-request'
+import { PageResult } from '../types'
 
 const query = gql`
-  query ($id: Int, $page: Int, $perPage: Int, $search: String) {
+  query (
+    $id: Int
+    $page: Int
+    $perPage: Int
+    $search: String
+    $format_in: [MediaFormat]
+  ) {
     Page(page: $page, perPage: $perPage) {
       pageInfo {
         total
@@ -11,7 +17,12 @@ const query = gql`
         hasNextPage
         perPage
       }
-      media(id: $id, search: $search, sort: [TRENDING_DESC]) {
+      media(
+        id: $id
+        search: $search
+        sort: [TRENDING_DESC]
+        format_in: $format_in
+      ) {
         id
         title {
           romaji
@@ -25,12 +36,14 @@ const query = gql`
         }
         seasonYear
         status
-        sort
       }
     }
   }
 `
 
-export async function getAnimeList(): Promise<Page> {
-  return await request('https://graphql.anilist.co', query)
+export async function getAnimeList(variables: Variables): Promise<PageResult> {
+  return await request('https://graphql.anilist.co', query, {
+    format_in: ['TV'],
+    ...variables
+  })
 }

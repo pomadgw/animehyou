@@ -1,3 +1,7 @@
+export interface PageResult {
+  Page: Page
+}
+
 export interface Page {
   pageInfo: PageInfo
   media: Media[]
@@ -11,7 +15,7 @@ interface PageInfo {
   hasNextPage: boolean
 }
 
-interface Media {
+export interface Media {
   id: number
   title: MediaTitle
   coverImage: MediaCoverImage
