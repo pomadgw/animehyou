@@ -10,9 +10,13 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "vue": "^3.2.45"
+    "graphql-request": "^5.1.0",
+    "lodash": "^4.17.21",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.191",
     "@typescript-eslint/eslint-plugin": "^5.47.0",
     "@typescript-eslint/parser": "^5.47.0",
     "@vitejs/plugin-vue": "^4.0.0",
