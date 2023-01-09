@@ -2,7 +2,6 @@
 
 Animehyou is a website to list informations about your favorite anime!
 
-<!-- TODO: once the Netlify is set, change the URL below -->
-You can see at [https://example.com](https://example.com).
+You can see at [https://pomadgw-animehyou.netlify.app/](https://pomadgw-animehyou.netlify.app/).
 
 Build with Vite + Vue 3 + TypeScript
