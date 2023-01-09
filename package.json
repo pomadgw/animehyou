@@ -10,6 +10,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "graphql-request": "^5.1.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },
