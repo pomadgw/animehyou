@@ -34,6 +34,9 @@ const query = gql`
           medium
           color
         }
+        description
+        averageScore
+        genres
         seasonYear
         status
       }

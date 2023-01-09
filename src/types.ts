@@ -21,6 +21,9 @@ export interface Media {
   coverImage: MediaCoverImage
   seasonYear: number
   status: string
+  description: string
+  averageScore: number
+  genres: string[]
 }
 
 interface MediaTitle {
