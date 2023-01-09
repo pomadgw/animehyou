@@ -41,9 +41,9 @@ const query = gql`
   }
 `
 
-export async function getAnimeList(variables: Variables): Promise<PageResult> {
+export async function getAnimeList(variables?: Variables): Promise<PageResult> {
   return await request('https://graphql.anilist.co', query, {
     format_in: ['TV'],
-    ...variables
+    ...(variables ?? {})
   })
 }
