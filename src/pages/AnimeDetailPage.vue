@@ -9,10 +9,16 @@
 
       <div class="mt-6 md:mt-0">
         <EntryList :value="detail.title.english" label="Name" />
+        <EntryList :value="detail.title.native" label="Name (Japanese)" />
         <EntryList :html="detail.description" label="Description" />
 
-        <EntryList :value="`${detail.averageScore}`" label="Average score" />
+        <EntryList :value="detail.seasonYear.toString()" label="Year" />
+        <EntryList
+          :value="detail.averageScore.toString()"
+          label="Average score"
+        />
         <EntryList :value="detail.genres.join(', ')" label="Genres" />
+        <EntryList :value="getStatusName(detail.status)" label="Status" />
       </div>
     </div>
   </div>
@@ -21,11 +27,28 @@
 import { ref, onMounted } from 'vue'
 import EntryList from '../components/EntryList.vue'
 import { getAnimeList } from '../api'
-import { Media } from '../types'
+import { Media, MediaStatus } from '../types'
 
 const detail = ref<Media | null>(null)
 
 const props = defineProps<{ id: string }>()
+
+const getStatusName = (status: MediaStatus): string => {
+  switch (status) {
+    case MediaStatus.FINISHED:
+      return 'Finished'
+    case MediaStatus.RELEASING:
+      return 'Ongoing'
+    case MediaStatus.CANCELLED:
+      return 'Cancelled'
+    case MediaStatus.HIATUS:
+      return 'On Hiatus'
+    case MediaStatus.NOT_YET_RELEASED:
+      return 'Not yet releaded'
+    default:
+      return ''
+  }
+}
 
 onMounted(async () => {
   const page = await getAnimeList({ id: props.id })

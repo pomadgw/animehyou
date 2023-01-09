@@ -27,6 +27,7 @@ const query = gql`
         title {
           romaji
           english
+          native
         }
         coverImage {
           extraLarge

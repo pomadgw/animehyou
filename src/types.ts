@@ -20,7 +20,7 @@ export interface Media {
   title: MediaTitle
   coverImage: MediaCoverImage
   seasonYear: number
-  status: string
+  status: MediaStatus
   description: string
   averageScore: number
   genres: string[]
@@ -37,4 +37,12 @@ interface MediaCoverImage {
   large: string
   medium: string
   color: string
+}
+
+export enum MediaStatus {
+  FINISHED = 'FINISHED',
+  RELEASING = 'RELEASING',
+  NOT_YET_RELEASED = 'NOT_YET_RELEASED',
+  CANCELLED = 'CANCELLED',
+  HIATUS = 'HIATUS'
 }
