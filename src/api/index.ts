@@ -58,6 +58,11 @@ export async function getAnimeList(variables?: Variables): Promise<PageResult> {
   })
 }
 
-export async function getGenres(variables?: Variables): Promise<PageResult> {
-  return await request('https://graphql.anilist.co', listGenresQuery)
+export async function getGenres(variables?: Variables): Promise<string[]> {
+  const { GenreCollection } = await request(
+    'https://graphql.anilist.co',
+    listGenresQuery
+  )
+
+  return GenreCollection
 }

@@ -1,4 +1,15 @@
 <template>
+  <div class="mb-6 flex justify-end">
+    <div class="flex items-center">
+      <label class="mr-6">Filter</label>
+      <MultiSelect
+        v-model="selectedGenres"
+        :options="genresList"
+        mode="tags"
+        style="width: 256px"
+      />
+    </div>
+  </div>
   <div
     v-if="page"
     ref="scrollComponent"
@@ -10,14 +21,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import debounce from 'lodash/debounce'
+import MultiSelect from '@vueform/multiselect'
 
 import AnimeCard from '../components/AnimeCard.vue'
-import { getAnimeList } from '../api'
+import { getAnimeList, getGenres } from '../api'
 import useScroll from '../composable/scroll'
 import { Media, PageResult } from '../types'
 
 const page = ref<PageResult | null>(null)
 const animeList = ref<Media[]>([])
+const genresList = ref<string[]>([])
+
+const selectedGenres = ref<string[]>([])
 const scrollComponent = ref<HTMLElement | null>(null)
 
 const pageNumber = ref(0)
@@ -26,6 +41,8 @@ onMounted(async () => {
   page.value = await getAnimeList()
   animeList.value = animeList.value.concat(page.value.Page.media)
   pageNumber.value = page.value.Page.pageInfo.currentPage
+
+  genresList.value = await getGenres()
 })
 
 const loadNewAnime = debounce(async () => {
@@ -45,3 +62,4 @@ useScroll(() => {
   }
 })
 </script>
+<style src="@vueform/multiselect/themes/default.css"></style>

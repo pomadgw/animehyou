@@ -10,6 +10,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@vueform/multiselect": "^2.5.8",
     "graphql-request": "^5.1.0",
     "lodash": "^4.17.21",
     "vue": "^3.2.45",
