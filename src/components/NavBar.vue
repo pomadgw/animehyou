@@ -1,11 +1,9 @@
 <template>
-  <nav class="py-4 px-6 flex items-center">
-    <div class="mr-3">
-      <img src="/icon.png" alt="Animehyou logo" class="w-12" />
-    </div>
-    <div class="text-3xl font-bold">Animehyou</div>
+  <nav class="py-4 px-6 flex items-center flex-col md:flex-row">
+    <img src="/icon.png" alt="Animehyou logo" class="w-12 md:mr-3" />
+    <div class="text-3xl font-bold mt-3 md:mt-0">Animehyou</div>
 
-    <ul class="flex ml-6">
+    <ul class="flex md:ml-6">
       <li>
         <router-link to="/">Homepage</router-link>
       </li>
