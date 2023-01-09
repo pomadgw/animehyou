@@ -1,13 +1,14 @@
 import { request, gql, Variables } from 'graphql-request'
 import { PageResult } from '../types'
 
-const query = gql`
+const listAnimeQuery = gql`
   query (
     $id: Int
     $page: Int
     $perPage: Int
     $search: String
     $format_in: [MediaFormat]
+    $genres: [String]
   ) {
     Page(page: $page, perPage: $perPage) {
       pageInfo {
@@ -22,6 +23,7 @@ const query = gql`
         search: $search
         sort: [TRENDING_DESC]
         format_in: $format_in
+        genre_in: $genres
       ) {
         id
         title {
@@ -45,9 +47,24 @@ const query = gql`
   }
 `
 
+const listGenresQuery = gql`
+  query {
+    GenreCollection
+  }
+`
+
 export async function getAnimeList(variables?: Variables): Promise<PageResult> {
-  return await request('https://graphql.anilist.co', query, {
+  return await request('https://graphql.anilist.co', listAnimeQuery, {
     format_in: ['TV'],
     ...(variables ?? {})
   })
+}
+
+export async function getGenres(variables?: Variables): Promise<string[]> {
+  const { GenreCollection } = await request(
+    'https://graphql.anilist.co',
+    listGenresQuery
+  )
+
+  return GenreCollection
 }
