@@ -1,10 +1,12 @@
 <template>
-  <div
-    :style="{ '--cover-image': `url(${anime.coverImage.large})` }"
-    class="h-72 md:h-96 bg-red-200 bg-cover gradient-overlay flex items-end p-3"
-  >
-    {{ anime.title.english }}
-  </div>
+  <router-link :to="`/anime/${anime.id}`">
+    <div
+      :style="{ '--cover-image': `url(${anime.coverImage.large})` }"
+      class="h-72 md:h-96 bg-red-200 bg-cover gradient-overlay flex items-end p-3"
+    >
+      {{ anime.title.english }}
+    </div>
+  </router-link>
 </template>
 <script setup lang="ts">
 import { Media } from '../types'

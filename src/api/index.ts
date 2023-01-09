@@ -27,6 +27,7 @@ const query = gql`
         title {
           romaji
           english
+          native
         }
         coverImage {
           extraLarge
@@ -34,6 +35,9 @@ const query = gql`
           medium
           color
         }
+        description
+        averageScore
+        genres
         seasonYear
         status
       }
