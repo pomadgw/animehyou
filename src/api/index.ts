@@ -1,7 +1,7 @@
 import { request, gql, Variables } from 'graphql-request'
 import { PageResult } from '../types'
 
-const query = gql`
+const listAnimeQuery = gql`
   query (
     $id: Int
     $page: Int
@@ -46,7 +46,7 @@ const query = gql`
 `
 
 export async function getAnimeList(variables?: Variables): Promise<PageResult> {
-  return await request('https://graphql.anilist.co', query, {
+  return await request('https://graphql.anilist.co', listAnimeQuery, {
     format_in: ['TV'],
     ...(variables ?? {})
   })
