@@ -19,7 +19,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import debounce from 'lodash/debounce'
 import MultiSelect from '@vueform/multiselect'
 
@@ -45,13 +45,31 @@ onMounted(async () => {
   genresList.value = await getGenres()
 })
 
-const loadNewAnime = debounce(async () => {
-  if (page.value?.Page.pageInfo.hasNextPage) {
-    page.value = await getAnimeList({ page: pageNumber.value + 1 })
-    animeList.value = animeList.value.concat(page.value.Page.media)
-    pageNumber.value = page.value.Page.pageInfo.currentPage
+const loadNewAnime = debounce(async (resetList = false) => {
+  const variable = {
+    page: 1,
+    genres: undefined as string[] | undefined
   }
+
+  if (page.value?.Page.pageInfo.hasNextPage && !resetList) {
+    variable.page = pageNumber.value + 1
+  }
+
+  if (selectedGenres.value.length > 0) {
+    // add genres to filter the list
+    variable.genres = selectedGenres.value
+  }
+
+  page.value = await getAnimeList(variable)
+  animeList.value = resetList
+    ? page.value.Page.media
+    : animeList.value.concat(page.value.Page.media)
+  pageNumber.value = page.value.Page.pageInfo.currentPage
 }, 1000)
+
+watch(selectedGenres, () => {
+  loadNewAnime(true)
+})
 
 useScroll(() => {
   const element = scrollComponent.value

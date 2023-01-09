@@ -8,6 +8,7 @@ const listAnimeQuery = gql`
     $perPage: Int
     $search: String
     $format_in: [MediaFormat]
+    $genres: [String]
   ) {
     Page(page: $page, perPage: $perPage) {
       pageInfo {
@@ -22,6 +23,7 @@ const listAnimeQuery = gql`
         search: $search
         sort: [TRENDING_DESC]
         format_in: $format_in
+        genre_in: $genres
       ) {
         id
         title {
