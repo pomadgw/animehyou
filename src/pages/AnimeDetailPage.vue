@@ -8,8 +8,8 @@
       </div>
 
       <div class="mt-6 md:mt-0">
-        <EntryList :value="detail.title.english" label="Name" />
-        <EntryList :value="detail.title.native" label="Name (Japanese)" />
+        <EntryList :value="detail.title.english" label="Title" />
+        <EntryList :value="detail.title.native" label="Title (Japanese)" />
         <EntryList :html="detail.description" label="Description" />
 
         <EntryList :value="detail.seasonYear.toString()" label="Year" />
