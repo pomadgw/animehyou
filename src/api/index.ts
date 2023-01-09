@@ -45,9 +45,19 @@ const listAnimeQuery = gql`
   }
 `
 
+const listGenresQuery = gql`
+  query {
+    GenreCollection
+  }
+`
+
 export async function getAnimeList(variables?: Variables): Promise<PageResult> {
   return await request('https://graphql.anilist.co', listAnimeQuery, {
     format_in: ['TV'],
     ...(variables ?? {})
   })
+}
+
+export async function getGenres(variables?: Variables): Promise<PageResult> {
+  return await request('https://graphql.anilist.co', listGenresQuery)
 }
