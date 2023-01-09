@@ -1,22 +1,16 @@
 <template>
-  <nav class="py-3 px-6">
-    <div class="text-2xl font-bold">Animehyou</div>
+  <nav class="py-4 px-6 flex items-center">
+    <div class="text-3xl font-bold">Animehyou</div>
 
-    <ul>
+    <ul class="flex ml-6">
       <li>
         <router-link to="/">Homepage</router-link>
+      </li>
+      <li class="ml-3">
         <!-- TODO: implement bookmark page -->
         <router-link to="/bookmark">Bookmark</router-link>
       </li>
     </ul>
   </nav>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  setup() {
-    return {}
-  }
-})
-</script>
+<script setup lang="ts"></script>
