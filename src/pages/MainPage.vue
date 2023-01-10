@@ -2,13 +2,13 @@
   <PageSpinner v-if="isLoading" />
   <template v-else-if="page">
     <div class="mb-6 flex justify-end">
-      <div class="flex items-center">
+      <div class="flex items-center w-full md:w-auto">
         <label class="mr-6">Filter</label>
         <MultiSelect
           v-model="selectedGenres"
           :options="genresList"
           mode="tags"
-          style="width: 256px"
+          style="min-width: 256px"
         />
       </div>
     </div>
