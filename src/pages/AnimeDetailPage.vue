@@ -1,5 +1,6 @@
 <template>
-  <div v-if="detail">
+  <PageSpinner v-if="isLoading" />
+  <div v-else-if="detail">
     <h1 class="text-3xl font-bold mb-6">{{ detail.title.english }}</h1>
 
     <div class="flex flex-col md:flex-row">
@@ -36,11 +37,14 @@ import { ref, onMounted, computed } from 'vue'
 import EntryList from '../components/EntryList.vue'
 import { getAnimeList } from '../api'
 import { Media, MediaStatus } from '../types'
+import PageSpinner from '../components/PageSpinner.vue'
 import useBookmark from '../composable/bookmark'
+import useLoading from '../composable/is-loading'
 
 const { addBookmark, bookmarks } = useBookmark()
 
 const detail = ref<Media | null>(null)
+const { isLoading, wrapLoadingState } = useLoading()
 
 const props = defineProps<{ id: string }>()
 
@@ -71,7 +75,9 @@ const getStatusName = (status: MediaStatus): string => {
 }
 
 onMounted(async () => {
-  const page = await getAnimeList({ id: props.id })
-  detail.value = page.Page.media[0]
+  wrapLoadingState(async () => {
+    const page = await getAnimeList({ id: props.id })
+    detail.value = page.Page.media[0]
+  })
 })
 </script>
