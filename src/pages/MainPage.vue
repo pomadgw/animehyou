@@ -22,7 +22,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import MultiSelect from '@vueform/multiselect'
 
 import AnimeCard from '../components/AnimeCard.vue'
@@ -41,6 +41,10 @@ const { page, animeList, loadListofAnime } = useAnime()
 const selectedGenres = ref<string[]>([])
 const scrollComponent = ref<HTMLElement | null>(null)
 
+const additionalVariables = computed(() => {
+  return selectedGenres.value.length > 0 ? { genres: selectedGenres.value } : {}
+})
+
 onMounted(async () => {
   await wrapLoadingState(async () => {
     await loadListofAnime({}, true)
@@ -49,10 +53,8 @@ onMounted(async () => {
 })
 
 watch(selectedGenres, async () => {
-  const additionalvariables =
-    genresList.value.length > 0 ? { genres: genresList.value } : {}
   await wrapLoadingState(async () => {
-    loadListofAnime(additionalvariables, true)
+    loadListofAnime(additionalVariables.value, true)
   })
 })
 
