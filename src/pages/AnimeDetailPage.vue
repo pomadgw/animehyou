@@ -1,5 +1,6 @@
 <template>
-  <div v-if="detail">
+  <PageSpinner v-if="isLoading" />
+  <div v-else-if="detail">
     <h1 class="text-3xl font-bold mb-6">{{ detail.title.english }}</h1>
 
     <div class="flex flex-col md:flex-row">
@@ -8,7 +9,10 @@
       </div>
 
       <div class="mt-6 md:mt-0">
-        <EntryList :value="detail.title.english" label="Title" />
+        <EntryList
+          :value="detail.title.english ?? detail.title.romaji"
+          label="Title"
+        />
         <EntryList :value="detail.title.native" label="Title (Japanese)" />
         <EntryList :html="detail.description" label="Description" />
 
@@ -36,11 +40,14 @@ import { ref, onMounted, computed } from 'vue'
 import EntryList from '../components/EntryList.vue'
 import { getAnimeList } from '../api'
 import { Media, MediaStatus } from '../types'
+import PageSpinner from '../components/PageSpinner.vue'
 import useBookmark from '../composable/bookmark'
+import useLoading from '../composable/is-loading'
 
 const { addBookmark, bookmarks } = useBookmark()
 
 const detail = ref<Media | null>(null)
+const { isLoading, wrapLoadingState } = useLoading()
 
 const props = defineProps<{ id: string }>()
 
@@ -50,7 +57,10 @@ const isAlreadyInBookmark = computed(() =>
 
 const addToBookmark = () => {
   addBookmark(Number(props.id))
-  alert(`${detail?.value?.title.english} has been added to bookmark`)
+  const title = detail?.value?.title
+  if (title != null) {
+    alert(`${title.english ?? title.romaji} has been added to bookmark`)
+  }
 }
 
 const getStatusName = (status: MediaStatus): string => {
@@ -71,7 +81,9 @@ const getStatusName = (status: MediaStatus): string => {
 }
 
 onMounted(async () => {
-  const page = await getAnimeList({ id: props.id })
-  detail.value = page.Page.media[0]
+  wrapLoadingState(async () => {
+    const page = await getAnimeList({ id: props.id })
+    detail.value = page.Page.media[0]
+  })
 })
 </script>

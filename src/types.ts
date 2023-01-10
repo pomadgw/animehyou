@@ -29,7 +29,7 @@ export interface Media {
 interface MediaTitle {
   romaji: string
   english: string
-  native?: string
+  native: string
 }
 
 interface MediaCoverImage {

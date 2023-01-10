@@ -1,78 +1,67 @@
 <template>
-  <div class="mb-6 flex justify-end">
-    <div class="flex items-center">
-      <label class="mr-6">Filter</label>
-      <MultiSelect
-        v-model="selectedGenres"
-        :options="genresList"
-        mode="tags"
-        style="width: 256px"
-      />
+  <PageSpinner v-if="isLoading" />
+  <template v-else-if="page">
+    <div class="mb-6 flex justify-end">
+      <div class="flex items-center">
+        <label class="mr-6">Filter</label>
+        <MultiSelect
+          v-model="selectedGenres"
+          :options="genresList"
+          mode="tags"
+          style="width: 256px"
+        />
+      </div>
     </div>
-  </div>
-  <div
-    v-if="page"
-    ref="scrollComponent"
-    class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
-  >
-    <AnimeCard v-for="anime in animeList" :key="anime.id" :anime="anime" />
-  </div>
+    <div
+      ref="scrollComponent"
+      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
+    >
+      <AnimeCard v-for="anime in animeList" :key="anime.id" :anime="anime" />
+    </div>
+  </template>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
-import debounce from 'lodash/debounce'
+import { ref, onMounted, watch, computed } from 'vue'
 import MultiSelect from '@vueform/multiselect'
 
 import AnimeCard from '../components/AnimeCard.vue'
-import { getAnimeList, getGenres } from '../api'
-import useScroll from '../composable/scroll'
-import { Media, PageResult } from '../types'
+import PageSpinner from '../components/PageSpinner.vue'
 
-const page = ref<PageResult | null>(null)
-const animeList = ref<Media[]>([])
+import { getGenres } from '../api'
+import useScroll from '../composable/scroll'
+import useAnime from '../composable/anime'
+import useLoading from '../composable/is-loading'
+
 const genresList = ref<string[]>([])
+const { isLoading, wrapLoadingState } = useLoading()
+
+const { page, animeList, loadListofAnime } = useAnime()
 
 const selectedGenres = ref<string[]>([])
 const scrollComponent = ref<HTMLElement | null>(null)
 
-const pageNumber = ref(0)
-
-onMounted(async () => {
-  await loadListofAnime()
-  genresList.value = await getGenres()
+const additionalVariables = computed(() => {
+  return selectedGenres.value.length > 0 ? { genres: selectedGenres.value } : {}
 })
 
-const loadListofAnime = debounce(async (resetList = false) => {
-  const variable = {
-    page: 1,
-    genres: undefined as string[] | undefined
-  }
+onMounted(async () => {
+  await wrapLoadingState(async () => {
+    await loadListofAnime({}, true)
+    genresList.value = await getGenres()
+  })
+})
 
-  if (page.value?.Page.pageInfo.hasNextPage && !resetList) {
-    variable.page = pageNumber.value + 1
-  }
-
-  if (selectedGenres.value.length > 0) {
-    // add genres to filter the list
-    variable.genres = selectedGenres.value
-  }
-
-  page.value = await getAnimeList(variable)
-  animeList.value = resetList
-    ? page.value.Page.media
-    : animeList.value.concat(page.value.Page.media)
-  pageNumber.value = page.value.Page.pageInfo.currentPage
-}, 1000)
-
-watch(selectedGenres, () => {
-  loadListofAnime(true)
+watch(selectedGenres, async () => {
+  await wrapLoadingState(async () => {
+    loadListofAnime(additionalVariables.value, true)
+  })
 })
 
 useScroll(() => {
   const element = scrollComponent.value
   if (element != null) {
     if (element.getBoundingClientRect().bottom - 200 < window.innerHeight) {
-      loadListofAnime()
+      loadListofAnime({})
     }
   }
 })
