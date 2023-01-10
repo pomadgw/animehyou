@@ -49,5 +49,16 @@ describe('Bookmark', () => {
         JSON.stringify([20])
       )
     })
+
+    it('should not add duplicates bookmarks', async () => {
+      const dummyData: number[] = [20]
+
+      bookmark.setBookmarks(dummyData)
+      bookmark.addBookmark(20)
+
+      expect(localStorage.getItem(bookmark.BOOKMARK_KEY)).toBe(
+        JSON.stringify([20])
+      )
+    })
   })
 })

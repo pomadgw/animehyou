@@ -40,7 +40,7 @@ export function saveBookmarks(): void {
 }
 
 export function addBookmark(id: number): void {
-  bookmarkInstance.value.push(id)
+  if (!bookmarkInstance.value.includes(id)) bookmarkInstance.value.push(id)
   saveBookmarks()
 }
 

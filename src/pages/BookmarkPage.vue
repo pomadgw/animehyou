@@ -37,7 +37,7 @@ onMounted(async () => {
 const loadListofAnime = debounce(async (resetList = false) => {
   const variable = {
     page: 1,
-    idn_id: bookmarks.value
+    id_in: bookmarks.value
   }
 
   if (bookmarks.value.length === 0) {
