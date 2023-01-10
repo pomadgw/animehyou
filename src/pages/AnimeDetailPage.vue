@@ -57,7 +57,10 @@ const isAlreadyInBookmark = computed(() =>
 
 const addToBookmark = () => {
   addBookmark(Number(props.id))
-  alert(`${detail?.value?.title.english} has been added to bookmark`)
+  const title = detail?.value?.title
+  if (title != null) {
+    alert(`${title.english ?? title.romaji} has been added to bookmark`)
+  }
 }
 
 const getStatusName = (status: MediaStatus): string => {
