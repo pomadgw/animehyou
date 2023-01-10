@@ -1,4 +1,4 @@
-import { onMounted } from 'vue'
+import { Ref, onMounted, ref } from 'vue'
 
 type Nullable<T> = T | null
 
@@ -6,35 +6,41 @@ export const BOOKMARK_KEY = 'bookmark'
 
 type Bookmark = number[]
 
-let bookmarkInstance: Bookmark = []
+const bookmarkInstance = ref<Bookmark>([])
 
 export function resetBookmarks(): void {
-  bookmarkInstance = []
+  bookmarkInstance.value = []
 }
 
 export function setBookmarks(bookmark: Bookmark): void {
-  bookmarkInstance = bookmark
+  bookmarkInstance.value = bookmark
 }
 
-export function loadBookmark(): Bookmark {
+export function loadBookmark(): Ref<Bookmark> {
   const bookmarksInJSON: Nullable<string> =
     global.localStorage.getItem(BOOKMARK_KEY)
 
   if (bookmarksInJSON === null) {
-    global.localStorage.setItem(BOOKMARK_KEY, JSON.stringify(bookmarkInstance))
+    global.localStorage.setItem(
+      BOOKMARK_KEY,
+      JSON.stringify(bookmarkInstance.value)
+    )
   } else {
-    bookmarkInstance = JSON.parse(bookmarksInJSON)
+    bookmarkInstance.value = JSON.parse(bookmarksInJSON)
   }
 
   return bookmarkInstance
 }
 
 export function saveBookmarks(): void {
-  global.localStorage.setItem(BOOKMARK_KEY, JSON.stringify(bookmarkInstance))
+  global.localStorage.setItem(
+    BOOKMARK_KEY,
+    JSON.stringify(bookmarkInstance.value)
+  )
 }
 
 export function addBookmark(id: number): void {
-  bookmarkInstance.push(id)
+  bookmarkInstance.value.push(id)
   saveBookmarks()
 }
 
@@ -43,6 +49,7 @@ export default function useBookmark() {
   onMounted(loadBookmark)
 
   return {
-    addBookmark
+    addBookmark,
+    bookmarks: bookmarkInstance
   }
 }

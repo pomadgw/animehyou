@@ -13,7 +13,7 @@ describe('Bookmark', () => {
 
       localStorage.setItem(bookmark.BOOKMARK_KEY, JSON.stringify(dummyData))
 
-      expect(bookmark.loadBookmark()).toEqual(dummyData)
+      expect(bookmark.loadBookmark().value).toEqual(dummyData)
     })
 
     it('should load empty bookmark if it is not exist yet', async () => {
@@ -21,7 +21,7 @@ describe('Bookmark', () => {
 
       expect(localStorage.getItem(bookmark.BOOKMARK_KEY)).toBe(null)
 
-      expect(bookmark.loadBookmark()).toEqual(dummyData)
+      expect(bookmark.loadBookmark().value).toEqual(dummyData)
     })
   })
 
