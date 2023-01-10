@@ -20,59 +20,36 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-import debounce from 'lodash/debounce'
 import MultiSelect from '@vueform/multiselect'
 
 import AnimeCard from '../components/AnimeCard.vue'
-import { getAnimeList, getGenres } from '../api'
+import { getGenres } from '../api'
 import useScroll from '../composable/scroll'
-import { Media, PageResult } from '../types'
+import useAnime from '../composable/anime'
 
-const page = ref<PageResult | null>(null)
-const animeList = ref<Media[]>([])
 const genresList = ref<string[]>([])
+
+const { page, animeList, loadListofAnime } = useAnime()
 
 const selectedGenres = ref<string[]>([])
 const scrollComponent = ref<HTMLElement | null>(null)
 
-const pageNumber = ref(0)
-
 onMounted(async () => {
-  await loadListofAnime()
+  await loadListofAnime({}, true)
   genresList.value = await getGenres()
 })
 
-const loadListofAnime = debounce(async (resetList = false) => {
-  const variable = {
-    page: 1,
-    genres: undefined as string[] | undefined
-  }
-
-  if (page.value?.Page.pageInfo.hasNextPage && !resetList) {
-    variable.page = pageNumber.value + 1
-  }
-
-  if (selectedGenres.value.length > 0) {
-    // add genres to filter the list
-    variable.genres = selectedGenres.value
-  }
-
-  page.value = await getAnimeList(variable)
-  animeList.value = resetList
-    ? page.value.Page.media
-    : animeList.value.concat(page.value.Page.media)
-  pageNumber.value = page.value.Page.pageInfo.currentPage
-}, 1000)
-
 watch(selectedGenres, () => {
-  loadListofAnime(true)
+  const additionalvariables =
+    genresList.value.length > 0 ? { genres: genresList.value } : {}
+  loadListofAnime(additionalvariables, true)
 })
 
 useScroll(() => {
   const element = scrollComponent.value
   if (element != null) {
     if (element.getBoundingClientRect().bottom - 200 < window.innerHeight) {
-      loadListofAnime()
+      loadListofAnime({})
     }
   }
 })

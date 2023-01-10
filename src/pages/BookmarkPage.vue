@@ -13,53 +13,34 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import debounce from 'lodash/debounce'
 
 import AnimeCard from '../components/AnimeCard.vue'
-import { getAnimeList } from '../api'
 import useScroll from '../composable/scroll'
 import useBookmark from '../composable/bookmark'
-import { Media, PageResult } from '../types'
+import useAnime from '../composable/anime'
 
-const page = ref<PageResult | null>(null)
-const animeList = ref<Media[]>([])
+const { page, animeList, loadListofAnime } = useAnime()
 
 const scrollComponent = ref<HTMLElement | null>(null)
-
-const pageNumber = ref(0)
 
 const { bookmarks } = useBookmark()
 
 onMounted(async () => {
-  await loadListofAnime()
+  await loadListofAnime(
+    {
+      id_in: bookmarks.value
+    },
+    true
+  )
 })
-
-const loadListofAnime = debounce(async (resetList = false) => {
-  const variable = {
-    page: 1,
-    id_in: bookmarks.value
-  }
-
-  if (bookmarks.value.length === 0) {
-    return
-  }
-
-  if (page.value?.Page.pageInfo.hasNextPage && !resetList) {
-    variable.page = pageNumber.value + 1
-  }
-
-  page.value = await getAnimeList(variable)
-  animeList.value = resetList
-    ? page.value.Page.media
-    : animeList.value.concat(page.value.Page.media)
-  pageNumber.value = page.value.Page.pageInfo.currentPage
-}, 1000)
 
 useScroll(() => {
   const element = scrollComponent.value
   if (element != null) {
     if (element.getBoundingClientRect().bottom - 200 < window.innerHeight) {
-      loadListofAnime()
+      loadListofAnime({
+        id_in: bookmarks.value
+      })
     }
   }
 })
