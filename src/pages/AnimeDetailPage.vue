@@ -21,6 +21,7 @@
         <EntryList :value="getStatusName(detail.status)" label="Status" />
 
         <button
+          v-if="!isAlreadyInBookmark"
           class="border-gray-500 border block px-3 py-2 rounded mt-6"
           @click="addToBookmark"
         >
@@ -31,17 +32,21 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import EntryList from '../components/EntryList.vue'
 import { getAnimeList } from '../api'
 import { Media, MediaStatus } from '../types'
 import useBookmark from '../composable/bookmark'
 
-const { addBookmark } = useBookmark()
+const { addBookmark, bookmarks } = useBookmark()
 
 const detail = ref<Media | null>(null)
 
 const props = defineProps<{ id: string }>()
+
+const isAlreadyInBookmark = computed(() =>
+  bookmarks.value.includes(Number(props.id))
+)
 
 const addToBookmark = () => {
   addBookmark(Number(props.id))
