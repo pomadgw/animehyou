@@ -14,7 +14,7 @@
 
         <EntryList :value="detail.seasonYear.toString()" label="Year" />
         <EntryList
-          :value="detail.averageScore.toString()"
+          :value="detail.averageScore ? detail.averageScore.toString() : '-'"
           label="Average score"
         />
         <EntryList :value="detail.genres.join(', ')" label="Genres" />
