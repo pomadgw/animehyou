@@ -1,6 +1,6 @@
 <template>
   <PageSpinner v-if="isLoading" />
-  <template v-else>
+  <template v-else-if="page">
     <div class="mb-6 flex justify-end">
       <div class="flex items-center">
         <label class="mr-6">Filter</label>
@@ -13,7 +13,6 @@
       </div>
     </div>
     <div
-      v-if="page"
       ref="scrollComponent"
       class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
     >
