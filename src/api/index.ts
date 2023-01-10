@@ -4,6 +4,7 @@ import { PageResult } from '../types'
 const listAnimeQuery = gql`
   query (
     $id: Int
+    $id_in: [Int]
     $page: Int
     $perPage: Int
     $search: String
@@ -20,6 +21,7 @@ const listAnimeQuery = gql`
       }
       media(
         id: $id
+        id_in: $id_in
         search: $search
         sort: [TRENDING_DESC]
         format_in: $format_in
