@@ -1,6 +1,6 @@
-import { PageResponse, Variable } from "@/types/anilist";
+import { PageResponse, Variable } from '@/types/anilist'
 
-  const query = `
+const query = `
   query (
     $id: Int
     $id_in: [Int]
@@ -48,18 +48,18 @@ import { PageResponse, Variable } from "@/types/anilist";
 `
 
 export async function getList(variables: Variable): Promise<PageResponse> {
-  const url = "https://graphql.anilist.co";
+  const url = 'https://graphql.anilist.co'
   const options = {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
     },
     body: JSON.stringify({
       query: query,
-      variables: variables,
-    }),
-  };
+      variables: variables
+    })
+  }
 
-  return fetch(url, options).then((response) => response.json());
+  return fetch(url, options).then((response) => response.json())
 }

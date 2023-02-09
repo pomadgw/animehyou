@@ -2,10 +2,10 @@ import Head from 'next/head'
 // import Image from 'next/image'
 // import { Inter } from '@next/font/google'
 import { useState } from 'react'
-import { Media } from "@/types/anilist";
+import { Media } from '@/types/anilist'
 import { getList } from '@/api/anilist'
-import useApi from '@/hooks/useApi';
-import { AnimeList } from '@/components/AnimeList';
+import useApi from '@/hooks/useApi'
+import { AnimeList } from '@/components/AnimeList'
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -16,12 +16,12 @@ function IsLoading() {
 export default function Home() {
   const [media, setMedia] = useState<Media[]>([])
   const { isLoading, error } = useApi(async () => {
-    const result = await getList({ perPage: 10 });
+    const result = await getList({ perPage: 10 })
 
     if (result != null) {
-      setMedia(result.data.Page.media);
+      setMedia(result.data.Page.media)
     }
-  });
+  })
 
   return (
     <>
@@ -37,5 +37,5 @@ export default function Home() {
         <AnimeList media={media} />
       </main>
     </>
-  );
+  )
 }

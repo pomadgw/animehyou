@@ -58,7 +58,6 @@ export interface PageResponse {
   }
 }
 
-
 export interface Variable {
   id?: number
   id_in?: number[]
