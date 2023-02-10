@@ -23,14 +23,16 @@
     "lint-staged": "^13.1.1",
     "next": "13.1.6",
     "option-t": "^33.8.0",
-    "prettier": "^2.8.3",
     "preact": "^10.11.3",
+    "prettier": "^2.8.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-query": "^3.39.3",
+    "react-transition-group": "^4.4.5",
     "typescript": "4.9.5"
   },
   "devDependencies": {
+    "@types/react-transition-group": "^4.4.5",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.4"

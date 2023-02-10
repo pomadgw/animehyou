@@ -1,16 +1,58 @@
 import Head from 'next/head'
-// import Image from 'next/image'
-// import { Inter } from '@next/font/google'
-import { useState } from 'react'
+import Image from 'next/image'
+import { Transition } from 'react-transition-group'
+
+import { useState, useRef, CSSProperties } from 'react'
 import { Media } from '@/types/anilist'
 import { getList } from '@/api/anilist'
 import useApi from '@/hooks/useApi'
 import { AnimeList } from '@/components/AnimeList'
 
-// const inter = Inter({ subsets: ['latin'] })
+const duration = 300
 
-function IsLoading() {
-  return <div>Is loading</div>
+const defaultStyle = {
+  transition: `opacity ${duration}ms ease-in-out`,
+  opacity: 0
+} as CSSProperties
+
+const transitionStyles = {
+  entering: { opacity: 1 },
+  entered: { opacity: 1 },
+  exiting: { opacity: 0 },
+  exited: { opacity: 0 }
+} as Record<string, CSSProperties>
+
+function IsLoading({ isLoading }: { isLoading: boolean }) {
+  const nodeRef = useRef(null)
+
+  return (
+    <Transition
+      nodeRef={nodeRef}
+      in={isLoading}
+      timeout={duration}
+      unmountOnExit={true}
+    >
+      {(state) => (
+        <div
+          ref={nodeRef}
+          style={{
+            ...defaultStyle,
+            ...transitionStyles[state]
+          }}
+          className="absolute w-full h-full top-0 left-0"
+        >
+          <div className="flex items-center justify-center h-full">
+            <Image
+              src="https://cdn.jsdelivr.net/gh/n3r4zzurr0/svg-spinners@898b2afc8daacbbe7d00978aa195b115dfabe4fb/svg-css/90-ring.svg"
+              alt="Is loading"
+              width={64}
+              height={64}
+            />
+          </div>
+        </div>
+      )}
+    </Transition>
+  )
 }
 
 export default function Home() {
@@ -33,7 +75,7 @@ export default function Home() {
       </Head>
 
       <main className="px-10 pt-10 pb-20 max-w-screen-2xl m-auto">
-        {isLoading && <IsLoading />}
+        <IsLoading isLoading={isLoading} />
         <AnimeList media={media} />
       </main>
     </>
